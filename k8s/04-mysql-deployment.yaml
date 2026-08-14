@@ -17,13 +17,24 @@ spec:
       labels:
         app: mysql
     spec:
+      initContainers:
+        # Downloads carrental.sql from GitHub into a shared volume.
+        # MySQL picks it up from /docker-entrypoint-initdb.d on first boot.
+        - name: download-sql
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              curl -L -o /init-sql/carrental.sql \
+                https://raw.githubusercontent.com/chetan080808/docker-k8s-carrental/main/mysql/carrental.sql
+              echo "SQL downloaded successfully"
+          volumeMounts:
+            - name: init-sql
+              mountPath: /init-sql
       containers:
         - name: mysql
-          image: chetan0808/carrental-mysql:latest
-          # Replace chetan0808 with your Docker Hub username
-          # Build and push:
-          #   docker build -t chetan0808/carrental-mysql:latest ./mysql
-          #   docker push chetan0808/carrental-mysql:latest
+          image: mysql:8.0
           ports:
             - containerPort: 3306
           env:
@@ -50,6 +61,8 @@ spec:
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d   # MySQL auto-imports any .sql file here on first boot
           readinessProbe:
             exec:
               command:
@@ -72,3 +85,5 @@ spec:
         - name: mysql-data
           persistentVolumeClaim:
             claimName: mysql-pvc
+        - name: init-sql
+          emptyDir: {}    # Shared between init container and mysql container

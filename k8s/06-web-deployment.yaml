@@ -30,14 +30,7 @@ spec:
               echo "MySQL is ready!"
       containers:
         - name: carrental-web
-          image: chetan0808/carrental-web:latest
-          # Replace chetan0808 with your Docker Hub username
-          # Build and push:
-          #   docker build -t chetan0808/carrental-web:latest ./app
-          #   docker push chetan0808/carrental-web:latest
-          #
-          # OR use the prebuilt image (if available):
-          #   image: chetan0808/carrental-web:latest
+          image: chetan0808/carrental-web:latest   # prebuilt image on Docker Hub
           ports:
             - containerPort: 80
           env:
