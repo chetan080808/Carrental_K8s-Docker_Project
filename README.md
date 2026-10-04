@@ -1,5 +1,32 @@
 # Car Rental Portal — Kubernetes Deployment
 
+## 🚀 A DevOps Project, Built One Level at a Time
+
+This isn't a project that showed up finished. It's being **leveled up stage by stage**, on purpose — the same way most real teams actually adopt DevOps: start with something that just runs, then containerize it, then orchestrate it, then automate it, then take it to the cloud. Each stage is a complete, working checkpoint before the next one begins.
+
+If you're a student following along, that's the point: **don't skip to the end**. Clone each stage, see what changed and why, and build the muscle memory one layer at a time instead of inheriting a finished black box.
+
+```
+  Stage 1          Stage 2                Stage 3                      Stage 4
+┌─────────┐      ┌───────────┐        ┌──────────────────┐        ┌────────────────┐
+│ Plain   │ ───► │ Dockerized │ ───►  │  + Kubernetes      │ ───► │  + AWS (EKS /   │
+│ PHP app │      │            │       │  (this repo)       │      │  ECR / RDS)     │
+│         │      │            │       │       +             │      │  production-    │
+│         │      │            │       │   CI/CD             │      │  grade cloud    │
+│         │      │            │       │  (build→push→      │      │  deployment     │
+│         │      │            │       │   deploy, hands-off)│      │                 │
+└─────────┘      └───────────┘        └──────────────────┘        └────────────────┘
+```
+
+| Stage | What it covers | Where |
+|---|---|---|
+| 1. Dockerize | Take a plain PHP app and containerize it | [`Carrental_Docker_Project`](https://github.com/chetan080808/Carrental_Docker_Project) |
+| 2. **Docker + Kubernetes** | **Deploy the containers on a Kubernetes cluster** | **👉 this repo** |
+| 3. Docker + K8s + CI/CD | Automate build → push → deploy with GitHub Actions | [`Carrental_Ci-CD`](https://github.com/chetan080808/Carrental_Ci-CD) |
+| 4. AWS Migration | Move the whole stack to EKS / ECR / RDS | upcoming |
+
+This README covers stage 2 only: getting the app running on a Kubernetes cluster (Minikube, by default). Building the Docker images from scratch is covered in the [stage 1 repo](https://github.com/chetan080808/Carrental_Docker_Project); automating all of this with GitHub Actions is stage 3, in the [CI/CD repo](https://github.com/chetan080808/Carrental_Ci-CD).
+
 A PHP + MySQL car rental web application deployed on Kubernetes.  
 This project is designed as a hands-on learning guide for students to understand
 containerisation, Docker image building, and Kubernetes fundamentals.
@@ -433,12 +460,14 @@ minikube delete
 
 ## Next Steps
 
-Once you are comfortable with this setup, explore:
+Once you are comfortable manually building, pushing, and `kubectl apply`-ing this setup, stage 3 automates all of it: **[`Carrental_Ci-CD`](https://github.com/chetan080808/Carrental_Ci-CD)** builds both images, pushes them to Docker Hub, and deploys to this same cluster automatically via GitHub Actions on every push to `main`.
+
+Other things worth exploring at this stage, independent of the CI/CD move:
 
 - **Helm Charts** — package your K8s manifests as a reusable chart
 - **Horizontal Pod Autoscaler (HPA)** — auto-scale based on CPU/memory
 - **Liveness & Readiness Probes** — already configured in this project, read more in the K8s docs
 - **Resource Limits** — add `resources.requests` and `resources.limits` to each container
-- **CI/CD** — automate build + push + deploy using GitHub Actions
 - **Sealed Secrets / Vault** — proper secrets management for production
-- **Cloud Deployment** — deploy this same setup on GKE (Google), EKS (AWS), or AKS (Azure)
+
+Stage 4 (upcoming) replaces Minikube with a real cloud cluster — GKE, EKS, or AKS.
